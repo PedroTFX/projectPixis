@@ -3,7 +3,7 @@ public class Piece{
 
     int none = 0;
     int pawn = 1;
-    int knigh = 3;  
+    int knight = 3;  
     int bishop= 3;
     int rook = 5;
     int queen = 9;

@@ -2,9 +2,7 @@ package XS;
 
 public class Board{
 
-    Piece[] board = new Piece[64];
-    Piece[] white_Pieces = new Piece[16];
-    Piece[] black_Pieces = new Piece[16];
+    static public int[] board = new int[64];
 
     /**
      * Initializes the Board, with the pieces int the starting position:
@@ -23,6 +21,24 @@ public class Board{
      */
     void initialBoard(Piece[] board){
         
+    }
+
+    void availableMoves(int player, Piece[] board){
+
+    }
+
+     /**
+     * Assumes move is valid
+     * Changes Piece position by move increment
+     * @param move
+     */
+    void move(int move, int piecePos){
+        //clean previous pos
+        String piece = board[piecePos].getType();
+        board[piecePos] = new Piece("none", piecePos);
+
+        //move to new pos
+        board[piecePos + move] = piece;
     }
 
     public static void main(String[] args) {

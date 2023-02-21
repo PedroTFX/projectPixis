@@ -1,23 +1,25 @@
 package XS;
 public class Piece{
 
-    int none = 0;
-    int pawn = 1;
-    int knight = 3;  
-    int bishop= 3;
-    int rook = 5;
-    int queen = 9;
-    int king = 10;
+    public enum PieceType{
+        NONE,
+        PAWN,
+        KNIGHT,
+        BISHOP,
+        ROOK,
+        QUEEN,
+        KING,
+    }
 
-    int pos;
-    String type;
+    private int pos;
+    private PieceType type;
 
     /**
      * Initialization of the pieces setting the type and its pos
      * @param type
      * @param pos
      */
-    public Piece(String type, int pos){
+    public Piece(PieceType type, int pos){
         this.type = type;
         this.pos = pos;
     }
@@ -34,33 +36,18 @@ public class Piece{
      * @param pos
      * @return
      */
-    int[] availableMoves(String type, int pos){
+    int[] availableMoves(PieceType type, int pos){
         int[] ret;
         return null;
-    }
-
-    /**
-     * returns Piece position (int)
-     * @return
-     */
-    int getPos(){
-        return pos;
     }
 
     /*
      * Returns Piece type (string)
      */
-    String getType(){
+    PieceType getType(int pos){
         return type;
     }
 
-    /**
-     * Assumes move is valid
-     * Changes Piece position
-     * @param move
-     */
-    void move(int move){
 
-    }
       
 }

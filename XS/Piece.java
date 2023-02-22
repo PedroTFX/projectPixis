@@ -1,27 +1,21 @@
 package XS;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class Piece{
 
-    public enum PieceType{
-        NONE,
-        PAWN,
-        KNIGHT,
-        BISHOP,
-        ROOK,
-        QUEEN,
-        KING,
-    }
-
-    private int pos;
-    private PieceType type;
+    private String type;
+    
+    
 
     /**
-     * Initialization of the pieces setting the type and its pos
+     * Initialization of the pieces setting the type
      * @param type
      * @param pos
      */
-    public Piece(PieceType type, int pos){
+    public Piece(String type){
         this.type = type;
-        this.pos = pos;
     }
     
     /**
@@ -36,18 +30,76 @@ public class Piece{
      * @param pos
      * @return
      */
-    int[] availableMoves(PieceType type, int pos){
-        int[] ret;
+    public int[] availableMoves(int player, String type, int pos){
+        if(type.equals("")){
+            return null;
+        }
+        ArrayList<Integer> availableMoves = new ArrayList<Integer>();
+        
+            
+
+
         return null;
     }
 
     /*
      * Returns Piece type (string)
      */
-    PieceType getType(int pos){
+    public String getType(int pos){
         return type;
     }
 
+    private static HashMap<Character, Integer> translate = new HashMap<Character, Integer>() {{
+        put('a', 0);
+        put('b', 1);
+        put('c', 2);
+        put('d', 3);
+        put('e', 4);
+        put('f', 5);
+        put('g', 6);
+        put('h', 7);
+    }};
+
+    /**
+     * Translate Chess Coords to VectorV2
+     * VectorV2[0] = f
+     * VectorV2[1] = 2
+     * @param move
+     * @return
+     */
+    public static int[] CoordsToV2(String move){
+        String[] moveInArray = move.split("-");
+        int[] ret = new int[2];
+        ret[0] = Integer.parseInt(moveInArray[1]);
+        ret[1] = translate.get(moveInArray[0].charAt(0));
+        return ret;
+    }
+
+    /**
+     * Translate VectorV2 to Chess Coords
+     * VectorV2[0] = f
+     * VectorV2[1] = 2
+     * @param move
+     * @return
+     */
+    public static String V2ToCoords(int[] vectorv2){
+        char coord = '-';
+        for (HashMap.Entry<Character, Integer> entry : translate.entrySet()) {
+            if (entry.getValue() == vectorv2[1]) {
+                coord = entry.getKey();
+                break;
+            }
+        }
+
+        if(coord == '-'){
+            return null;
+        }
+        return Character.toString(coord) + "-" + Integer.toString(vectorv2[0]);
+    }
+
+    public static void main(String[] args) {
+        // System.out.println(V2ToCoords(CoordsToV2("b-2")));
+    }
 
       
 }

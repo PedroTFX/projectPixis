@@ -2,7 +2,9 @@ package XS;
 
 public class Board{
 
-    static public int[] board = new int[64];
+    static public String[][] board = new String[8][8];
+    static private String NONE = "";
+    static private boolean playerPlaying = true;
 
     /**
      * Initializes the Board, with the pieces int the starting position:
@@ -19,11 +21,16 @@ public class Board{
      * The players sit on opposite sides of the board, with the white pieces starting on the first rank and the black pieces starting on the eighth rank.
      * @param board
      */
-    void initialBoard(Piece[] board){
+    void initialBoard(String[] board){
         
     }
 
-    void availableMoves(int player, Piece[] board){
+    /**
+     * Searches for all the possible moves for either for the white pieces or the black pieces
+     * @param player
+     * @param board
+     */
+    void availableMoves(int player, String[] board){
 
     }
 
@@ -32,13 +39,16 @@ public class Board{
      * Changes Piece position by move increment
      * @param move
      */
-    void move(int move, int piecePos){
+    String[] move(int move, int piecePos){
         //clean previous pos
-        String piece = board[piecePos].getType();
-        board[piecePos] = new Piece("none", piecePos);
+        String piece = board[piecePos];
+        board[piecePos] = NONE;
 
         //move to new pos
         board[piecePos + move] = piece;
+
+        playerPlaying = playerPlaying ? false: true;
+        return board;
     }
 
     public static void main(String[] args) {

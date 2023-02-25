@@ -6,8 +6,9 @@ import java.util.HashMap;
 public class Piece{
 
     private String type;
-    private static String NONE = "";
-    
+    private static String NONE = ".";
+    private static char BLACK = 'b';
+    private static char WHITE = 'w';
     /**
      * Show available moves of the Piece given by the paramters:
      * Pawn: Pawns can move one or two squares forward on their first move, and one square forward on all subsequent moves. They capture diagonally, one square forward to the left or right.
@@ -25,7 +26,7 @@ public class Piece{
         if(piece_type.equals("")){
             return null;
         }
-        ArrayList<String> available_moves = new ArrayList<String>();
+        ArrayList<Integer> available_moves = new ArrayList<Integer>();
         if(piece_type.charAt(1) == 'k'){
             return KnightMoves(pos, board);
         }
@@ -41,7 +42,7 @@ public class Piece{
         if(piece_type.charAt(1) == 'p'){
             return PawnMoves(pos, board);
         }
-        return  available_moves;
+        return available_moves;
     }
 
 
@@ -58,7 +59,7 @@ public class Piece{
 
         //logic
         for (int move : king_dir) {
-            if(Math.abs((pos + move % 8) - (pos % 8)) <= 2 || Math.abs(pos) > 8){
+            if(Math.abs((pos + move % 8) - (pos % 8)) <= 2 && move + pos < 63 && move + pos > 0){
                 if(!board[pos + move].equals(NONE) || !(board[pos + move].charAt(0) == board[pos].charAt(0))){
                     avail_moves.add(move);
                 }
@@ -69,22 +70,30 @@ public class Piece{
 
 
 
-    private static ArrayList<Integer> PawnMoves(int pos, String[] board) {
-        int[] king_dir = new int[]{
-            pos - 9 , pos - 8 , pos  -7, 
-            pos + 1 , /*pos*/   pos - 1,
-            pos - 9 , pos - 8 , pos  -7, 
+    public static ArrayList<Integer> PawnMoves(int pos, String[] board) {
+        int[] pawn_dir = new int[]{
+            9 , 8 , 7
         };
 
         //init
         ArrayList<Integer> avail_moves = new ArrayList<Integer>();
+        char piece_colour = getColour(pos, board);
 
-        // //logic
-        // for (int move : king_dir) {
-        //     if(!board[pos + move].equals(NONE) || !(board[pos + move].charAt(0) == board[pos].charAt(0))){
-        //         avail_moves.add(move);
-        //     }
-        // }
+        //logic
+        for (int move : pawn_dir) {
+            if(piece_colour == BLACK){          //BLACK PAWNS MOVE IN THE OPOSITE DIRECTION
+                move *= -1;
+            }
+
+            if(isInInside(pos, move) && Math.abs(move) != 8 && !board[pos + move].equals(NONE) && piece_colour != getColour(pos + move, board)){//COMER PEÇAS
+                avail_moves.add(move);
+            }else if(Math.abs(move) == 8 && isInInside(pos, move) && board[pos + move].equals(NONE)){                                           //MOVE FORWARDS once
+                    if((pos >= 48 && pos <= 55 && (piece_colour == BLACK)) || ((pos >= 8 && pos <= 15) && piece_colour == WHITE)){
+                        avail_moves.add(move * 2);                                                                                              //MOVE TWICE
+                    }
+                    avail_moves.add(move);
+            }
+        }
         return avail_moves;
     }
 
@@ -106,6 +115,9 @@ public class Piece{
         return null;
     }
 
+    private static char getColour(int pos, String[] board){
+        return !board[pos].equals(NONE) ? board[pos].charAt(0) : 'n';
+    }
 
 
     /*
@@ -113,6 +125,16 @@ public class Piece{
      */
     public String getType(int pos){
         return type;
+    }
+
+    /**
+     * Checks if the movement is legal by checking if the piece didnt go behond the board boundaries
+     * @param pos
+     * @param move
+     * @returns true if the move is legal or false if its ilegal
+     */
+    public static boolean isInInside(int pos, int move){
+        return pos + move <= 63 && pos + move >= 0 && Math.abs(((pos + move) % 8) - (pos % 8)) <= 2;
     }
 
     private static HashMap<Character, Integer> translate = new HashMap<Character, Integer>() {{
@@ -165,6 +187,16 @@ public class Piece{
 
     public static void main(String[] args) {
         // System.out.println(V2ToCoords(CoordsToV2("b-2")));
+        int[] board = new int[64];
+        for(int i = 0; i < board.length; i++){
+            board[i] = i;
+            System.out.print(board[i] + " ");
+            if(i % 8 == 7){
+                System.out.println("");
+            }
+        }
+        
+        System.out.println(isInInside(0, -1));
     }
 
       

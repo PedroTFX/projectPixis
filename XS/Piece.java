@@ -6,17 +6,7 @@ import java.util.HashMap;
 public class Piece{
 
     private String type;
-    
-    
-
-    /**
-     * Initialization of the pieces setting the type
-     * @param type
-     * @param pos
-     */
-    public Piece(String type){
-        this.type = type;
-    }
+    private static String NONE = "";
     
     /**
      * Show available moves of the Piece given by the paramters:
@@ -26,21 +16,97 @@ public class Piece{
      * Bishop: Bishops move diagonally, any number of squares, as long as their path is unobstructed. They capture by landing on the square occupied by an opposing piece.
      * Queen: Queens can move horizontally, vertically, or diagonally, any number of squares, as long as their path is unobstructed. They are the most powerful piece on the board and can move like both rooks and bishops. They capture by landing on the square occupied by an opposing piece.
      * King: Kings can move one square in any direction. They are the most important piece on the board, and if a player's king is threatened with capture (i.e., "in check"), the player must take steps to remove the threat. The game is won by checkmating the opponent's king, which means putting the king in check and not being able to get out of it on the next move.
-     * @param type
-     * @param pos
+     * @param i
+     * @param board
      * @return
      */
-    public int[] availableMoves(int player, String type, int pos){
-        if(type.equals("")){
+    public static ArrayList<Integer> availableMoves(char piece_colour, int pos, String[] board){
+        String piece_type = board[pos];
+        if(piece_type.equals("")){
             return null;
         }
-        ArrayList<Integer> availableMoves = new ArrayList<Integer>();
-        
-            
+        ArrayList<String> available_moves = new ArrayList<String>();
+        if(piece_type.charAt(1) == 'k'){
+            return KnightMoves(pos, board);
+        }
+        if(piece_type.charAt(1) == 'b'){
+            return BishopMoves(pos, board);
+        }
+        if(piece_type.charAt(1) == 'Q'){
+            return QueenMoves(pos, board);
+        }
+        if(piece_type.charAt(1) == 'K'){
+            return KingMoves(pos, board);
+        }
+        if(piece_type.charAt(1) == 'p'){
+            return PawnMoves(pos, board);
+        }
+        return  available_moves;
+    }
 
 
+
+    private static ArrayList<Integer> KingMoves(int pos, String[] board) {
+        int[] king_dir = new int[]{
+            pos - 9 , pos - 8 , pos  -7, 
+            pos + 1 , /*pos*/   pos - 1,
+            pos + 9 , pos + 8 , pos  +7, 
+        };
+
+        //init
+        ArrayList<Integer> avail_moves = new ArrayList<Integer>();
+
+        //logic
+        for (int move : king_dir) {
+            if(Math.abs((pos + move % 8) - (pos % 8)) <= 2 || Math.abs(pos) > 8){
+                if(!board[pos + move].equals(NONE) || !(board[pos + move].charAt(0) == board[pos].charAt(0))){
+                    avail_moves.add(move);
+                }
+            }
+        }
+        return avail_moves;
+    }
+
+
+
+    private static ArrayList<Integer> PawnMoves(int pos, String[] board) {
+        int[] king_dir = new int[]{
+            pos - 9 , pos - 8 , pos  -7, 
+            pos + 1 , /*pos*/   pos - 1,
+            pos - 9 , pos - 8 , pos  -7, 
+        };
+
+        //init
+        ArrayList<Integer> avail_moves = new ArrayList<Integer>();
+
+        // //logic
+        // for (int move : king_dir) {
+        //     if(!board[pos + move].equals(NONE) || !(board[pos + move].charAt(0) == board[pos].charAt(0))){
+        //         avail_moves.add(move);
+        //     }
+        // }
+        return avail_moves;
+    }
+
+
+
+    private static ArrayList<Integer> QueenMoves(int pos, String[] board) {
         return null;
     }
+
+
+
+    private static ArrayList<Integer> BishopMoves(int pos, String[] board) {
+        return null;
+    }
+
+
+
+    private static ArrayList<Integer> KnightMoves(int pos, String[] board) {
+        return null;
+    }
+
+
 
     /*
      * Returns Piece type (string)
